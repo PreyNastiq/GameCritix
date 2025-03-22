@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "345797489503",
+    "project_id": "gamecritix-ec68a",
+    "storage_bucket": "gamecritix-ec68a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345797489503:android:4031bfe7836d854939fcea",
+        "android_client_info": {
+          "package_name": "com.example.game_critix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIsIWV5rf0XauSt3rgceWod0pLNLcNLY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
