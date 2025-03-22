@@ -31,7 +31,7 @@ class _SliderPageState extends State<SliderPage> {
             aspectRatio: .66, child: Image.asset(image, fit: BoxFit.cover)),
       );
     }).toList();
-
+    
     return Scaffold(
       backgroundColor: Colors.black,
       body: StackedListWidget(
