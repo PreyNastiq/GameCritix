@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -9,20 +10,35 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
   //text controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   Future signUp() async {
-    // Add your sign-up logic here
+    if (passwordConfirmed()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+    }
+  }
+
+  bool passwordConfirmed() {
+    if (_passwordController.text.trim() ==
+        _confirmPasswordController.text.trim()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -90,6 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: TextField(
+                    obscureText: true,
                     controller: _passwordController,
                     style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
@@ -106,6 +123,34 @@ class _RegisterPageState extends State<RegisterPage> {
                         fillColor: Colors.grey.shade900,
                         filled: true,
                         hintText: 'password',
+                        hintStyle: TextStyle(color: Colors.grey)),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
+                //confirm password textfield
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  child: TextField(
+                    obscureText: true,
+                    controller: _confirmPasswordController,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: const Color.fromARGB(255, 0, 255, 0),
+                              width: 2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: const Color.fromARGB(255, 0, 255, 0)),
+                        ),
+                        fillColor: Colors.grey.shade900,
+                        filled: true,
+                        hintText: 'Confirm password',
                         hintStyle: TextStyle(color: Colors.grey)),
                   ),
                 ),
@@ -127,7 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       child: Center(
                           child: Text(
-                        'Sign In',
+                        'Sign Up',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                       )),
