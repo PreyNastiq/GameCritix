@@ -1,34 +1,28 @@
-// ignore_for_file: unused_import
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
-  const LoginPage({super.key, required this.showRegisterPage});
+class RegisterPage extends StatefulWidget {
+  final VoidCallback showLoginPage;
+  const RegisterPage({super.key, required this.showLoginPage});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
+
   //text controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
-  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future signUp() async {
+    // Add your sign-up logic here
   }
 
   @override
@@ -52,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                 //welcome back, you can login here
 
                 Text(
-                  'Welcome back, you can login here',
+                  'Hello, Register here',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -118,21 +112,12 @@ class _LoginPageState extends State<LoginPage> {
 
                 SizedBox(height: 30),
 
-                //forget password
-
-                Text(
-                  'Forget Password?',
-                  style: TextStyle(color: Colors.grey),
-                ),
-
-                SizedBox(height: 30),
-
-                //signin button
+                //signup button
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 80.0),
                   child: GestureDetector(
-                    onTap: signIn,
+                    onTap: signUp,
                     child: Container(
                       padding: EdgeInsets.all(20),
                       margin: EdgeInsets.symmetric(horizontal: 40),
@@ -152,25 +137,25 @@ class _LoginPageState extends State<LoginPage> {
 
                 SizedBox(height: 25),
 
-                //not a memeber?
+                //already registered
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a memeber?',
+                      'ALready Registered?',
                       style: TextStyle(color: Colors.grey),
                     ),
                     SizedBox(
                       width: 4,
                     ),
 
-                    //register now
+                    //login now
 
                     GestureDetector(
-                      onTap: widget.showRegisterPage,
+                      onTap: widget.showLoginPage,
                       child: Text(
-                        'Register now',
+                        'Login now',
                         style: TextStyle(
                             color: const Color.fromARGB(255, 0, 255, 0),
                             fontWeight: FontWeight.bold),
