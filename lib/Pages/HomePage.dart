@@ -20,8 +20,8 @@ class _HomePageState extends State<HomePage>
 
   //Pages to navigate
   final List<Widget> _pages = [
-    SliderPage(),
-    CustomCardCarousel(),
+    const SliderPage(),
+    const CustomCardCarousel(),
     const HistoryPage(),
   ];
 
@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      resizeToAvoidBottomInset: false,
 
       //AppBar
       appBar: (_selectedTab == 1) ? CustomAppBar() : null,
