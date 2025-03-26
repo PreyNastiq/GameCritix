@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -24,12 +25,27 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future signUp() async {
+
+    //Loading animation
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: LoadingAnimationWidget.beat(
+                color: const Color.fromARGB(255, 0, 255, 0),
+                size: 100),
+          );
+        });
+
     if (passwordConfirmed()) {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
     }
+
+    //pop the loading animation
+    Navigator.of(context).pop();
   }
 
   bool passwordConfirmed() {
