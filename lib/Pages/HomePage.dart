@@ -3,48 +3,32 @@ import 'package:game_critix/Pages/HomepageWidgets/CustomCardCarousel.dart';
 import 'package:game_critix/Pages/HomepageWidgets/CustomDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:game_critix/Pages/HomepageWidgets/CustomNavBar.dart';
-import 'package:game_critix/Pages/HomepageWidgets/InventoryPage.dart';
+import 'package:game_critix/Pages/HomepageWidgets/HistoryPage.dart';
 import 'package:game_critix/Pages/SliderPage.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
-
-  final PageController pageController = PageController(initialPage: 1);
-
-  final List<Widget> pages = [
-    SliderPage(),
-    CustomCardCarousel(),
-    InventoryPage(),
-  ];
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  int _currentPage = 1;
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  //selected index control nav bar
+  int _selectedTab = 1;
 
-  late AnimationController _animationController;
-  late Animation<double> _opacityAnimation;
+  //Pages to navigate
+  final List<Widget> _pages = [
+    SliderPage(),
+    CustomCardCarousel(),
+    const HistoryPage(),
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-    _opacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(_animationController);
-  }  
-
-  void _updatePageIndex(int index) {
+  //update selected index
+  void navigateBottomBar(int index) {
     setState(() {
-      _currentPage = index;
-      if (_currentPage == 1) {
-        _animationController.reverse();
-      } else {
-        _animationController.forward();
-      }
+      _selectedTab = index;
     });
   }
 
@@ -52,37 +36,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      resizeToAvoidBottomInset: false,
 
       //AppBar
-      appBar:PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: FadeTransition(
-          opacity: _opacityAnimation,
-          child: _currentPage == 1 ? CustomAppBar() : Container(),
-        ),
-      ),
+      appBar: (_selectedTab == 1) ? CustomAppBar() : null,
 
       //Drawer
-      endDrawer: _currentPage == 1 ? CustomDrawer() : null,
+      endDrawer: CustomDrawer(),
 
       //Body
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: PageView(
-          controller: widget.pageController,
-          onPageChanged: _updatePageIndex,
-          children: widget.pages.map((page) => Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: page,
-            )).toList(),
-        ),
-      ),
+      body: _pages[_selectedTab],
 
       //NavBar
       bottomNavigationBar: CustomNavBar(
-        pageController: widget.pageController,
-        onPageChanged: _updatePageIndex,
-        currentIndex: _currentPage,
+        onTabChange: (index) => navigateBottomBar(index),
       ),
     );
   }

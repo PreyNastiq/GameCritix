@@ -31,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
         context: context,
         builder: (context) {
           return Center(
-            child: LoadingAnimationWidget.beat(
+            child: LoadingAnimationWidget.fallingDot(
                 color: const Color.fromARGB(255, 0, 255, 0),
                 size: 100),
           );
