@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 import 'package:stacked_animated_list/ui/stacked_list_widget.dart';
 
 class SliderPage extends StatefulWidget {
@@ -20,25 +19,32 @@ const images = [
 ];
 
 class _SliderPageState extends State<SliderPage> {
+  List<String> imageList = List.from(images);
+
   @override
   Widget build(BuildContext context) {
     const cardWidth = 300.0;
 
-    final listItems = images.mapIndexed((index, image) {
+    final listItems = imageList.map((image) {
       return SizedBox(
-        width: cardWidth,
+        width: 250,
         child: AspectRatio(
-            aspectRatio: .66, child: Image.asset(image, fit: BoxFit.cover)),
+          aspectRatio: .66,
+          child: Image.asset(image, fit: BoxFit.cover),
+        ),
       );
     }).toList();
-    
+
     return Scaffold(
       backgroundColor: Colors.black,
-      body: StackedListWidget(
-        listItems: listItems,
-        rotationAngle: 10,
-        listItemWidth: cardWidth,
-        longPressDelay: 0,
+      body: Center(
+        child:
+          StackedListWidget(
+            listItems: listItems,
+            rotationAngle: 5,
+            listItemWidth: cardWidth,
+            longPressDelay: 0,
+          ),
       ),
     );
   }
