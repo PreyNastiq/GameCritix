@@ -41,6 +41,7 @@ dependencies:
   stacked_animated_list: ^1.0.2
   collection: ^1.19.0
   loading_animation_widget: ^1.3.0
+  eazy_swipeable_cards: ^1.1.1
 
 dev_dependencies:
   flutter_test:
