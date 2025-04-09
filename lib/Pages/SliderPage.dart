@@ -24,6 +24,18 @@ class _SliderPageState extends State<SliderPage> {
 
   final int pageSize = 7;
 
+  void _showSwipeIndicator(Widget indicator) {
+    setState(() {
+      swipeIndicator = indicator;
+    });
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      setState(() {
+        swipeIndicator = null;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,67 +88,111 @@ class _SliderPageState extends State<SliderPage> {
 
                 /// Swipe callbacks with animated indicator
                 onSwipeLeft: (item) {
-                  setState(() {
-                    counter--;
-                    swipeIndicator = const Icon(
-                      Icons.thumb_down,
-                      key: ValueKey('dislike'),
-                      size: 100,
-                      color: Colors.red,
-                    );
-                  });
+                  counter--;
+                  _showSwipeIndicator(
+                    Column(
+                      key: const ValueKey('dislike'),
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(
+                          Icons.thumb_down,
+                          size: 100,
+                          color: Colors.red,
+                        ),
+                        Text(
+                          "Disliked",
+                          style: TextStyle(color: Colors.red, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  );
                   return true;
                 },
                 onSwipeRight: (item) {
-                  setState(() {
-                    counter++;
-                    swipeIndicator = const Icon(
-                      Icons.thumb_up,
-                      key: ValueKey('like'),
-                      size: 100,
-                      color: Colors.green,
-                    );
-                  });
+                  counter++;
+                  _showSwipeIndicator(
+                    Column(
+                      key: const ValueKey('like'),
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(
+                          Icons.thumb_up,
+                          size: 100,
+                          color: Colors.green,
+                        ),
+                        Text(
+                          "Liked",
+                          style: TextStyle(color: Colors.green, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  );
                   return true;
                 },
                 onSwipeUp: (item) {
-                  setState(() {
-                    swipeIndicator = const Icon(
-                      Icons.skip_next,
-                      key: ValueKey('skip'),
-                      size: 100,
-                      color: Colors.yellow,
-                    );
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("You swiped up!")),
+                  _showSwipeIndicator(
+                    Column(
+                      key: const ValueKey('skip'),
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(
+                          Icons.skip_next,
+                          size: 100,
+                          color: Colors.yellow,
+                        ),
+                        Text(
+                          "Skipped",
+                          style: TextStyle(color: Colors.yellow, fontSize: 18),
+                        ),
+                      ],
+                    ),
                   );
                   return true;
                 },
                 onSwipeDown: (item) {
-                  setState(() {
-                    swipeIndicator = const Icon(
-                      Icons.message_outlined,
-                      key: ValueKey('message'),
-                      size: 100,
-                      color: Colors.blue,
-                    );
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("You swiped down!")),
+                  _showSwipeIndicator(
+                    Column(
+                      key: const ValueKey('message'),
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(
+                          Icons.message_outlined,
+                          size: 100,
+                          color: Colors.blue,
+                        ),
+                        Text(
+                          "Review",
+                          style: TextStyle(color: Colors.blue, fontSize: 18),
+                        ),
+                      ],
+                    ),
                   );
                   return true;
                 },
                 onDoubleTap: (item) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("You double tapped!")),
+                  _showSwipeIndicator(
+                    Column(
+                      key: const ValueKey('doubleTap'),
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(
+                          Icons.favorite,
+                          size: 100,
+                          color: Colors.pink,
+                        ),
+                        Text(
+                          "Double Tapped",
+                          style: TextStyle(color: Colors.pink, fontSize: 18),
+                        ),
+                      ],
+                    ),
                   );
                 },
 
-                onSwipedLeftAppear: const SizedBox.shrink(),
-                onSwipedRightAppear: const SizedBox.shrink(),
-                onSwipedDownAppear: const SizedBox.shrink(),
-                onSwipedUpAppear: const SizedBox.shrink(),
+                onSwipedLeftAppear: const SizedBox.square(),
+                onSwipedRightAppear: const SizedBox.square(),
+                onSwipedDownAppear: const SizedBox.square(),
+                onSwipedUpAppear: const SizedBox.square(),
               ),
             ),
           ),
@@ -148,7 +204,7 @@ class _SliderPageState extends State<SliderPage> {
             right: 0,
             child: Center(
               child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 100),
                 transitionBuilder: (Widget child, Animation<double> animation) {
                   return ScaleTransition(scale: animation, child: child);
                 },
