@@ -74,12 +74,24 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
   Widget build(BuildContext context) {
     final selectedCard =
         _currentIndex != null ? gameCards[_currentIndex!] : null;
-
+    //Top Games Cards
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+              child: Text('Top Games',
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  )),
+            ),
+          ),
           // Horizontal Card Carousel
           SizedBox(
             height: 150,
@@ -210,4 +222,4 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
       ),
     );
   }
-} 
+}
