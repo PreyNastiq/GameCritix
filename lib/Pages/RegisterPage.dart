@@ -70,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 //logo
 
-                Icon(Icons.lock,
+                Icon(Icons.person,
                     color: const Color.fromARGB(255, 0, 255, 0), size: 100),
 
                 SizedBox(height: 50),
@@ -204,7 +204,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'ALready Registered?',
+                      'Already Registered?',
                       style: TextStyle(color: Colors.grey),
                     ),
                     SizedBox(

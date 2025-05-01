@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:game_critix/Pages/Auth/CheckPage.dart';
+import 'package:game_critix/Services/Auth/CheckPage.dart';
 import 'package:game_critix/Pages/HomePage.dart';
 
 class AuthPage extends StatelessWidget {

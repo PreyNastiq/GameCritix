@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:game_critix/Pages/RegisterPage.dart';
 import 'package:game_critix/Pages/SplashScreen.dart';
-import 'package:game_critix/Test.dart';
 import 'package:game_critix/firebase_options.dart';
 
 void main() async {

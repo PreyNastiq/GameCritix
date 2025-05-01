@@ -7,10 +7,10 @@ class CustomNavBar extends StatefulWidget {
   const CustomNavBar({super.key, required this.onTabChange});
 
   @override
-  _CustomNavBarState createState() => _CustomNavBarState();
+  CustomNavBarState createState() => CustomNavBarState();
 }
 
-class _CustomNavBarState extends State<CustomNavBar> {
+class CustomNavBarState extends State<CustomNavBar> {
   int _activeIndex = 1; // Default active index
 
   @override
@@ -21,7 +21,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
         Icon(Icons.home, color: Colors.white),
         Icon(Icons.favorite, color: Colors.white),
       ],
-      inactiveIcons: [
+      inactiveIcons:const [
         Icon(Icons.slideshow, color: Colors.black),
         Icon(Icons.home, color: Colors.black),
         Icon(Icons.favorite, color: Colors.black),

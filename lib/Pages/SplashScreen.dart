@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:game_critix/Pages/Auth/AuthPage.dart';
+import 'package:game_critix/Services/Auth/AuthPage.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
