@@ -1,9 +1,7 @@
-// ignore_for_file: file_names
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:game_critix/Services/Auth/AuthPage.dart';
+import 'package:game_critix/Services/Auth/AuthGate.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -31,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => AuthPage()));
+          context, MaterialPageRoute(builder: (context) => AuthGate()));
     });
   }
 

@@ -6,11 +6,14 @@ import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:game_critix/Pages/RegisterPage.dart';
 import 'package:game_critix/Pages/SplashScreen.dart';
 import 'package:game_critix/firebase_options.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
-  //Firebase App Initialization
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  //Supabase App Initialization
+  await Supabase.initialize(
+      url: 'https://wtbkxydkwclxsmvnwocr.supabase.co',
+      anonKey:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind0Ymt4eWRrd2NseHNtdm53b2NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYyODQ5NjMsImV4cCI6MjA2MTg2MDk2M30.bV3HBSdcTOU6Purkv2XSRrvwpm0w70htwDnynTBM-NU');
 
   //High Refresh Rate Optimization
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,49 +1,59 @@
-// ignore_for_file: unused_import
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:game_critix/Pages/RegisterPage.dart';
+import 'package:game_critix/Services/Auth/AuthService.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
-  const LoginPage({super.key, required this.showRegisterPage});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //Auth service
+  final authService = AuthService();
+
   //text controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  Future signIn() async {
-    //loading animation
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: LoadingAnimationWidget.threeArchedCircle(
-                color: const Color.fromARGB(255, 0, 255, 0),
-                size: 100),
-          );
-        });
-
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
-
-    //pop the loading animation
-    Navigator.of(context).pop();
-  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  //login button pressed
+  void signIn() async {
+    //loading animation
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: LoadingAnimationWidget.fallingDot(
+                color: const Color.fromARGB(255, 0, 255, 0), size: 100),
+          );
+        });
+
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    //checking the state
+    try {
+      await authService.signInWithEmailPassword(email, password);
+
+      //error
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Error: $e'),
+        ));
+      }
+    }
+    //close loading animation
+    Navigator.of(context).pop();
   }
 
   @override
@@ -175,7 +185,10 @@ class _LoginPageState extends State<LoginPage> {
                     //register now
 
                     GestureDetector(
-                      onTap: widget.showRegisterPage,
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterPage())),
                       child: Text(
                         'Register now',
                         style: TextStyle(

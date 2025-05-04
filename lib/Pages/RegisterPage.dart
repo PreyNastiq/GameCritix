@@ -1,17 +1,21 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:game_critix/Pages/LoginPage.dart';
+import 'package:game_critix/Services/Auth/AuthService.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class RegisterPage extends StatefulWidget {
-  final VoidCallback showLoginPage;
-  const RegisterPage({super.key, required this.showLoginPage});
+  const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  //text controllers
+  // Auth service
+  final authService = AuthService();
+
+  // Text controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -24,36 +28,52 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  Future signUp() async {
+  // Signup function
+  void signUp() async {
+    // Show loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Center(
+          child: LoadingAnimationWidget.fallingDot(
+            color: const Color.fromARGB(255, 0, 255, 0),
+            size: 100,
+          ),
+        );
+      },
+    );
 
-    //Loading animation
-      showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: LoadingAnimationWidget.fallingDot(
-                color: const Color.fromARGB(255, 0, 255, 0),
-                size: 100),
-          );
-        });
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
 
-    if (passwordConfirmed()) {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+    if (password != confirmPassword) {
+      Navigator.of(context).pop(); // Close loader
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Passwords do not match')),
       );
+      return;
     }
 
-    //pop the loading animation
-    Navigator.of(context).pop();
-  }
+    try {
+      await authService.signUpWithEmailPassword(email, password);
+      Navigator.of(context).pop(); // Close loader
 
-  bool passwordConfirmed() {
-    if (_passwordController.text.trim() ==
-        _confirmPasswordController.text.trim()) {
-      return true;
-    } else {
-      return false;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Registered successfully. Please login now')),
+      );
+
+      // Navigate to login page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    } catch (e) {
+      Navigator.of(context).pop(); // Close loader
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
     }
   }
 
@@ -66,18 +86,16 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Center(
             child: Column(
               children: [
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
 
-                //logo
+                // Logo
+                const Icon(Icons.person,
+                    color: Color.fromARGB(255, 0, 255, 0), size: 100),
 
-                Icon(Icons.person,
-                    color: const Color.fromARGB(255, 0, 255, 0), size: 100),
+                const SizedBox(height: 50),
 
-                SizedBox(height: 50),
-
-                //welcome back, you can login here
-
-                Text(
+                // Welcome text
+                const Text(
                   'Hello, Register here',
                   style: TextStyle(
                     fontSize: 20,
@@ -87,138 +105,134 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
 
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
 
-                //email textfield
-
+                // Email field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: TextField(
                     controller: _emailController,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: const Color.fromARGB(255, 0, 255, 0),
-                            width: 2),
+                        borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 0, 255, 0), width: 2),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: const Color.fromARGB(255, 0, 255, 0)),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 0, 255, 0)),
                       ),
                       fillColor: Colors.grey.shade900,
                       filled: true,
-                      hintText: 'email',
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintText: 'Email',
+                      hintStyle: const TextStyle(color: Colors.grey),
                     ),
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-                //password textfield
-
+                // Password field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: TextField(
                     obscureText: true,
                     controller: _passwordController,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: const Color.fromARGB(255, 0, 255, 0),
-                              width: 2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: const Color.fromARGB(255, 0, 255, 0)),
-                        ),
-                        fillColor: Colors.grey.shade900,
-                        filled: true,
-                        hintText: 'password',
-                        hintStyle: TextStyle(color: Colors.grey)),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 0, 255, 0), width: 2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 0, 255, 0)),
+                      ),
+                      fillColor: Colors.grey.shade900,
+                      filled: true,
+                      hintText: 'Password',
+                      hintStyle: const TextStyle(color: Colors.grey),
+                    ),
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-                //confirm password textfield
-
+                // Confirm password field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: TextField(
                     obscureText: true,
                     controller: _confirmPasswordController,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: const Color.fromARGB(255, 0, 255, 0),
-                              width: 2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: const Color.fromARGB(255, 0, 255, 0)),
-                        ),
-                        fillColor: Colors.grey.shade900,
-                        filled: true,
-                        hintText: 'Confirm password',
-                        hintStyle: TextStyle(color: Colors.grey)),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 0, 255, 0), width: 2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 0, 255, 0)),
+                      ),
+                      fillColor: Colors.grey.shade900,
+                      filled: true,
+                      hintText: 'Confirm password',
+                      hintStyle: const TextStyle(color: Colors.grey),
+                    ),
                   ),
                 ),
 
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
 
-                //signup button
-
+                // Sign Up button
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 80.0),
                   child: GestureDetector(
                     onTap: signUp,
                     child: Container(
-                      padding: EdgeInsets.all(20),
-                      margin: EdgeInsets.symmetric(horizontal: 40),
+                      padding: const EdgeInsets.all(20),
+                      margin: const EdgeInsets.symmetric(horizontal: 40),
                       decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 0, 255, 0),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Center(
-                          child: Text(
-                        'Sign Up',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      )),
+                      child: const Center(
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
                     ),
                   ),
                 ),
 
-                SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-                //already registered
-
+                // Already Registered?
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Already Registered?',
                       style: TextStyle(color: Colors.grey),
                     ),
-                    SizedBox(
-                      width: 4,
-                    ),
-
-                    //login now
-
+                    const SizedBox(width: 4),
                     GestureDetector(
-                      onTap: widget.showLoginPage,
-                      child: Text(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                        );
+                      },
+                      child: const Text(
                         'Login now',
                         style: TextStyle(
-                            color: const Color.fromARGB(255, 0, 255, 0),
+                            color: Color.fromARGB(255, 0, 255, 0),
                             fontWeight: FontWeight.bold),
                       ),
                     )

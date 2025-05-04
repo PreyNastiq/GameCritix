@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_critix/Pages/GameDetailPage.dart';
 
 class CustomCardCarousel extends StatefulWidget {
   const CustomCardCarousel({super.key});
@@ -69,12 +70,18 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
 
   int? _currentIndex; // Track the selected card index
   final ScrollController _scrollController = ScrollController();
+  List<bool> _likedGames = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _likedGames = List.generate(gameCards.length, (_) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
     final selectedCard =
         _currentIndex != null ? gameCards[_currentIndex!] : null;
-    //Top Games Cards
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
       child: Column(
@@ -83,7 +90,7 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
               child: Text('Top Games',
                   style: const TextStyle(
                     fontSize: 30,
@@ -92,9 +99,8 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
                   )),
             ),
           ),
-          // Horizontal Card Carousel
           SizedBox(
-            height: 150,
+            height: 200,
             child: ListView.builder(
               controller: _scrollController,
               scrollDirection: Axis.horizontal,
@@ -103,7 +109,6 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      // Toggle selection: deselect if already selected
                       if (_currentIndex == index) {
                         _currentIndex = null;
                       } else {
@@ -112,10 +117,10 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
                     });
                   },
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 250),
                     curve: Curves.easeInOut,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
-                    width: _currentIndex == index ? 200 : 100,
+                    width: _currentIndex == index ? 300 : 150,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       image: DecorationImage(
@@ -137,10 +142,9 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
 
           const SizedBox(height: 20),
 
-          // Conditionally Render Game Details Section with Animation
           AnimatedOpacity(
             opacity: selectedCard != null ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 300), // Match card animation
+            duration: const Duration(milliseconds: 250),
             curve: Curves.easeInOut,
             child: selectedCard != null
                 ? Padding(
@@ -158,7 +162,6 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Game Title
                           Text(
                             selectedCard['title']!,
                             style: const TextStyle(
@@ -168,8 +171,6 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
                             ),
                           ),
                           const SizedBox(height: 20),
-
-                          // Price
                           Text(
                             "💵 Price:",
                             style: TextStyle(
@@ -183,8 +184,6 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
                                 fontSize: 16, color: Colors.white70),
                           ),
                           const SizedBox(height: 20),
-
-                          // Requirements
                           Text(
                             "🖥️ System Requirements:",
                             style: TextStyle(
@@ -198,8 +197,6 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
                                 fontSize: 16, color: Colors.white70),
                           ),
                           const SizedBox(height: 20),
-
-                          // Description
                           Text(
                             "📝 Description:",
                             style: TextStyle(
@@ -211,6 +208,46 @@ class _CustomCardCarouselState extends State<CustomCardCarousel> {
                             selectedCard['description']!,
                             style: const TextStyle(
                                 fontSize: 16, color: Colors.white70),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  size: 40,
+                                  _likedGames[_currentIndex!]
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: _likedGames[_currentIndex!]
+                                      ? const Color.fromARGB(255, 0, 255, 0)
+                                      : const Color.fromARGB(255, 0, 255, 0),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _likedGames[_currentIndex!] =
+                                        !_likedGames[_currentIndex!];
+                                  });
+                                },
+                              ),
+                              const SizedBox(width: 160),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GameDetailsPage(
+                                        gameDetails: selectedCard,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color.fromARGB(255, 0, 255, 0),
+                                ),
+                                child: const Text("Show More"),
+                              ),
+                            ],
                           ),
                         ],
                       ),
