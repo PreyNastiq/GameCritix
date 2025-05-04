@@ -50,3 +50,4 @@ firebase_options.dart
 .firebaserc
 firestore.indexes.json
 firestore.rules
+.env
