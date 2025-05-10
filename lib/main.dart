@@ -1,12 +1,7 @@
-// ignore_for_file: unused_import
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:game_critix/Pages/RegisterPage.dart';
 import 'package:game_critix/Pages/SplashScreen.dart';
-import 'package:game_critix/firebase_options.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {

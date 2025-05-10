@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_critix/Pages/HomepageWidgets/DeveloperPage.dart';
+import 'package:game_critix/Pages/DeveloperPage.dart';
 import 'package:game_critix/Pages/HomepageWidgets/HistoryPage.dart';
 import 'package:game_critix/Services/Auth/AuthService.dart';
 
